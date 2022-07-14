@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Web URL Control</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+
+    <style>
+         body {
+        padding: base-spacing-unit;
+        font-family:'Source Sans Pro', sans-serif;
+        margin:0;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin-right:auto;
+        margin-left:auto;
+        display:flex;
+        flex-direction: column;
+        justify-content:center;
+        align-items:center;
+        min-height:100vh;
+      }
+
+      button {
+        margin-left: 20px;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .inserir{
+        justify-content: center;
+      }
+
+    </style>
+
+</head>
+<body>
+
+  <div class="container">
+    <form action="addRecord/" method="post">
+        {% csrf_token %}
+        URL: <br>
+        <input name="url">
+        <br><br>
+        Ofício: <br>
+        <input name="oficio">
+        <br><br>
+        Chamado: <br>
+        <input name="chamado">
+        <br><br>
+        <input type="submit" value="Inserir" class="inserir">
+    </form>
+  </div>
+ 
+</body>
+</html>
