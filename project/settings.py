@@ -14,6 +14,58 @@ from pathlib import Path
 
 import os
 
+import ldap
+from django_auth_ldap.config import LDAPSearch, NestedGroupOfNamesType
+
+#Definindo o Servidor LDAP
+AUTH_LDAP_SERVER_URI = 'ldap://%s' % os.environ["LDAP_SERVER"]
+
+#Definindo o usuário e a pesquisa para esse usuário, fazer o BIND
+AUTH_LDAP_BIND_DN = os.environ["LDAP_BIND_DN"]
+AUTH_LDAP_BIND_PASSWORD = os.environ["LDAP_BIND_PASSWORD"]
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    "cn=users,dc=htbnoc,dc=com", ldap.SCOPE_SUBTREE, "(cn=%(user)s)"
+)
+
+#Definindo o metodo de busca dos grupos
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+            "CN=Builtin,dc=htbnoc,dc=com", 
+            ldap.SCOPE_SUBTREE,
+             "(objectClass=group)",
+            )
+AUTH_LDAP_GROUP_TYPE = NestedGroupOfNamesType()
+
+#Popular o Django com usuários do AD.
+AUTH_LDAP_USER_ATTR_MAP = {
+            "username": "cn",
+            "first_name": "givenName",
+            "last_name": "sn",
+             "email": "mail",
+}
+
+#AUTH_LDAP_GROUP_TYPE = ActiveDirectoryGroupType(name_attr="cn")
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+            "is_active" : ["CN=Eng-Full,CN=Builtin,DC=htbnoc,DC=com", "CN=Eng-View,CN=Builtin,DC=htbnoc,DC=com"],
+            "is_superuser": "CN=Eng-Full,CN=Builtin,DC=htbnoc,DC=com",
+            "is_staff": "CN=Eng-Full,CN=Builtin,DC=htbnoc,DC=com",
+}
+
+#Forçar atualizar os usuários
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+#Usar os grupos do AD para verificar as permissoes
+AUTH_LDAP_FIND_GROUP_PERMS = True
+
+#Manter cache de usuários para diminuir pesquisas no AD.
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
+
+# Manter os servidores de autenticação Remoto, e depois local.
+AUTHENTICATION_BACKENDS = [
+            'django_auth_ldap.backend.LDAPBackend',
+                'django.contrib.auth.backends.ModelBackend',
+]
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,9 +81,9 @@ except KeyError as e:
     raise RuntimeError("Chave nao encontrada!") from e
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [".SRVVMA05URL01.htbnoc.com"]
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -129,4 +181,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = "/var/www/webcontrolurl/static"
+
 STATICFILES_DIRS = [BASE_DIR / "static"]

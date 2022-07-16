@@ -1,114 +1,19 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Web URL Control</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-
-
-    <style>
-      body {
-        padding: base-spacing-unit;
-        font-family:'Source Sans Pro', sans-serif;
-        margin:0;
-      }
-
-      .container {
-        max-width: 1000px;
-        margin-right:auto;
-        margin-left:auto;
-        display:flex;
-        flex-direction: column;
-        justify-content:center;
-        align-items:center;
-        min-height:100vh;
-      }
-
-      .ButtonsNav {
-        display: flex;
-        width: 60%;
-        margin: 20px;
-        padding: 20px;
-        justify-content:space-between;
-        align-items:center;
-      }
-
-      .btn {
-        margin: 0px 20px;
-        height: 40px;
-        border: 1px solid blue;
-        padding: 10px 24px;
-        border-radius: 10px;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .btn:hover{
-        background-color: aliceblue;
-        cursor: pointer;
-      }
-
-      table, th, td {
-        margin: 20px;
-        border: 1px solid blue;
-      }
-
-      .table {
-        width: 80%;
-      }
-
-      th {
-        font-size: 16px;
-        height: 60px;
-      }
-
-      th,td {
-        text-align: center;
-        vertical-align:middle;
-      }
-
-      tr:nth-child(even) {background-color: #2a2aa6;color: white;}
-
-    </style>
-
-    <script>
-      function importarCSV(){
-        window.location.href="addMultipleUrl/"
-      }
-
-      function inserirURL(){
-        window.location.href="AddUrl/"
-      }
-    </script>
-
-
-  </head>
-  <body>
-
-    <div class="container">
-	
-      
-      <div class="ButtonsNav">
-        <button class="btn" onclick="inserirURL()">Inserir URL</button>
-        <button class="btn" onclick="importarCSV()">Upload CSV</button>
-      </div>
+{% extends 'webcontrolurl/base.html' %}
+{% block content %}
+    
+      <h1>Base de URLs</h1>
 
       <table class="table">
         <tr class="table-row">
-            <th class="header__item">URL</th><th class="header__item">Oficío</th><th class="header__item">Ticket</th>
+            <th class="header__item">URL</th><th class="header__item">Oficío</th><th class="header__item">Ticket</th><th class="header__item">Usuário</th>
         </tr>
-            {% for url in urls %}
+            {% for url in object_list %}
               <tr class="table-row">
-                <td class="table-data">{{url.url}}</td>
-                <td class="table-data">{{url.oficio}}</td>
-                <td class="table-data">{{url.chamado}}</td></tr>
+                <td class="table-data">{{ url.url }}</td>
+                <td class="table-data">{{ url.oficio }}</td>
+                <td class="table-data">{{ url.chamado }}</td>
+                <td class="table-data">{{ url.usuario }}</td>
+              </tr>
             {% endfor %}
-        
       </table>
-    </div>
-   
-  </body>
-</html>
+  {% endblock %}
