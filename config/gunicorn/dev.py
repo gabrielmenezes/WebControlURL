@@ -9,7 +9,7 @@ workers = 2
 # The socket to bind
 bind = "0.0.0.0:8000"
 # Restart workers when code changes (development only!)
-reload = True
+reload = False
 # Write access and error info to /var/log
 accesslog = errorlog = "/var/log/gunicorn/dev.log"
 # Redirect stdout/stderr to log file
