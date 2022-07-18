@@ -5,7 +5,7 @@
 
       <table class="table">
         <tr class="table-row">
-            <th class="header__item">URL</th><th class="header__item">Oficío</th><th class="header__item">Ticket</th><th class="header__item">Usuário</th>
+            <th class="header__item">URL</th><th class="header__item">Oficío</th><th class="header__item">Ticket</th><th class="header__item">Usuário</th><th class="header__item">Data</th>
         </tr>
             {% for url in object_list %}
               <tr class="table-row">
@@ -13,6 +13,7 @@
                 <td class="table-data">{{ url.oficio }}</td>
                 <td class="table-data">{{ url.chamado }}</td>
                 <td class="table-data">{{ url.usuario }}</td>
+                <td class="table-data">{{ url.created_at }}</td>
               </tr>
             {% endfor %}
       </table>

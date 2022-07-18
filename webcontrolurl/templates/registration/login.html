@@ -1,32 +1,12 @@
+{% extends 'webcontrolurl/base.html' %}
 {% block content %}
-
-{% if form.errors %}
-<p>Não conseguimos autenticar seu usuário, verifique seu usuário e senha.</p>
-{% endif %}
-
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Você não tem acesso a está página.</p>
-    {% else %}
-    <p>Se autentique para entrar.</p>
-    {% endif %}
-{% endif %}
-
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-
-<input type="submit" value="login">
-<input type="hidden" name="next" value="{{ next }}">
-</form>
-
-{% endblock %}
+    <H1>Login</H1>
+    <br/><br/>
+    <div class="form-group w-50">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button class="btn btn-secondary">Login</button>
+      </form>
+    </div>
+  {% endblock %}
