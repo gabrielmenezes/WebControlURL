@@ -91,3 +91,17 @@ def removerUrl(request, pk):
 
                 response = redirect('home')
                 return response
+
+def aplicar(request):
+        #pegar todas urls
+        urls = Url.objects.all()
+        
+        #inicializar resposta
+        content = ''
+
+        #iterar sobre cada url para cadastrar no arquivo
+        for url in urls:
+                content+=url.url+'\n'
+        
+        #responder o arquivo.
+        return HttpResponse(content, content_type='text/plain')
