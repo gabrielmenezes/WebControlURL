@@ -1,0 +1,26 @@
+{% extends 'webcontrolurl/base.html' %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+    <H1>Remover URL</H1>
+    <br/><br/>
+    <h3>Deletar: {{ url.url }}</h3>
+    <div class="form-group w-50">
+      <form method="POST">
+        {% csrf_token %}<br>
+        <strong>Tem certeza?</strong><br><br>
+        <input type='hidden' value="" name="user">
+        <button class="btn btn-secondary">Remover</button>
+      </form>
+    </div>
+
+    <script>
+      var name = "{{ user.id }}"
+      document.getElementById('user').value = name;
+    </script>
+  {% else %}
+    <p>Página disponível apenas para usuários logados!</p>
+  {% endif %}
+
+ {% endblock %}

@@ -1,11 +1,11 @@
-from cmath import exp
 from django.views.generic import ListView, CreateView
 from django.template import loader
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.exceptions import ValidationError
+from django.shortcuts import redirect
 
 import csv
-from .models import Url
+from .models import Url, DeletedUrl
 from .forms import UrlForm
 
 class HomeView(ListView):
@@ -16,6 +16,7 @@ class addUrlView(CreateView):
         model = Url
         form_class = UrlForm
         template_name = 'webcontrolurl/addUrl.html'
+
 
 def addMultipleUrl(request):
         if request.method == 'GET':
@@ -56,4 +57,37 @@ def addMultipleUrl(request):
                         url.save()
                         writer.writerow([fields[0], 'sucess'])
 
+                return response
+
+def removerUrl(request, pk):
+        if request.method == 'GET':
+               #Carrega página a renderizar
+               template = loader.get_template('webcontrolurl/removeUrl.html')
+               #Pega URL a ser removida
+               url = Url.objects.get(pk=pk)
+               #Inseri a URL no contexto
+               context = {
+                       'url': url,
+               }
+               #Retorna a página para seguir com a deleção
+               return HttpResponse(template.render({}, request))
+
+        if request.method == 'POST':
+                #Pega URL a ser deletada
+                url = Url.objects.get(pk=pk)
+                user = request.user
+                audit = DeletedUrl(url=url.url,usuario=user)
+
+                #Verifica se tem problemas para salvar a auditoria no banco
+                try:
+                        audit.full_clean()
+                except ValidationError as e:
+                        return HttpResponseBadRequest('Falha no sistema de auditoria a URL %s' % e)
+
+                #Se nao houver problemas, salva e remove a URL
+                audit.save()
+                url.delete()
+
+
+                response = redirect('home')
                 return response

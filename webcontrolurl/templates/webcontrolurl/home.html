@@ -5,7 +5,14 @@
 
       <table class="table">
         <tr class="table-row">
-            <th class="header__item">URL</th><th class="header__item">Oficío</th><th class="header__item">Ticket</th><th class="header__item">Usuário</th><th class="header__item">Data</th>
+            <th class="header__item">URL</th>
+            <th class="header__item">Oficío</th>
+            <th class="header__item">Ticket</th>
+            <th class="header__item">Usuário</th>
+            <th class="header__item">Data</th>
+            {% if user.is_authenticated %}
+              <th class="header__item">Deletar?</th>
+            {% endif %}
         </tr>
             {% for url in object_list %}
               <tr class="table-row">
@@ -14,6 +21,9 @@
                 <td class="table-data">{{ url.chamado }}</td>
                 <td class="table-data">{{ url.usuario }}</td>
                 <td class="table-data">{{ url.created_at }}</td>
+                {% if user.is_authenticated %}
+                  <td class="table-data"><a href="{% url 'audit_remove_url' url.pk %}">Deletar</a></td>
+                {% endif %}
               </tr>
             {% endfor %}
       </table>
