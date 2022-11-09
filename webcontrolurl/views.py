@@ -102,6 +102,7 @@ def aplicar(request):
         #iterar sobre cada url para cadastrar no arquivo
         for url in urls:
                 content+=url.url+'\n'
+                content+='*.'+url.url+'\n'
         
         #responder o arquivo.
         return HttpResponse(content, content_type='text/plain')

@@ -130,3 +130,4 @@ dmypy.json
 
 .DJANGO_SECRET_KEY
 .tool-versions
+.tool-versions
