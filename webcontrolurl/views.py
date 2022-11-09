@@ -23,10 +23,12 @@ def addMultipleUrl(request):
                 template = loader.get_template('webcontrolurl/addMultipleUrl.html')
                 return HttpResponse(template.render({}, request))
         elif request.method == 'POST':
+                #Cria Resposta
                 response = HttpResponse(
                         content_type='text/csv',
                         headers={'Content-Disposition': 'attachment; filename="result.csv"'},
                 )
+                #Stream para escrever a resposta.
                 writer = csv.writer(response)
                 #Pegar arquivo e usuario enviado na requisição
                 csv_file = request.FILES['csv_file']
