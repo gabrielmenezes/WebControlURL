@@ -60,6 +60,48 @@ def addMultipleUrl(request):
                         writer.writerow([fields[0], 'sucess'])
 
                 return response
+        
+def deleteMultipleUrl(request):
+        if request.method == 'GET':
+                template = loader.get_template('webcontrolurl/deleteMultipleUrl.html')
+                return HttpResponse(template.render({}, request))
+        elif request.method == 'POST':
+                #Cria Resposta
+                response = HttpResponse(
+                        content_type='text/csv',
+                        headers={'Content-Disposition': 'attachment; filename="result.csv"'},
+                )
+                #Stream para escrever a resposta.
+                writer = csv.writer(response)
+                #Pegar arquivo e usuario enviado na requisição
+                csv_file = request.FILES['csv_file']
+                user_id = request.user
+                #decodificar arquivo
+                file_data = csv_file.read().decode('utf-8-sig')
+                #separar em linhas
+                lines = file_data.split('\n')
+                #Para cada linha, gera a entrada no banco de dados
+                for line in lines:
+                        fields = line.split(';')
+                        
+                        #Retira se houver o cabeçalho
+                        if fields[0] == "URLs":
+                                continue
+                        #Senão verifica se esta vazio
+                        if fields[0] == '':
+                                continue 
+                        #Caso seja uma Url, verifica se salva no Banco.
+                        url = Url.objects.get(url=fields[0])
+                        audit = DeletedUrl(url=url.url,usuario=user_id)
+
+                        try:
+                                audit.full_clean()
+                                url.delete()
+                                writer.writerow([fields[0], 'sucess'])
+                        except ValidationError as e:
+                                writer.writerow([fields[0], e])
+                                continue
+                return response
 
 def removerUrl(request, pk):
         if request.method == 'GET':

@@ -1,0 +1,28 @@
+{% extends 'webcontrolurl/base.html' %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+  
+  <div class="form-group w-50">
+    <form action="{% url 'deleteMultipleURL' %}" method="POST" enctype="multipart/form-data"> 
+        {% csrf_token %}
+        <label class="form-label-sm" for="customFile">Selecione o arquivo CSV:</label>
+        <input type="file" class="form-control-sm" id="csv_file"  name="csv_file" />
+        <button class="btn btn-secondary">Upload</button>
+    </form>
+  </div>
+  <br/><br/>
+  <h1>Exemplo de CSV:</h1><br>
+  <p>URLs<br/>
+  topcanais.com</p>
+
+  <script>
+    var name = "{{ user.id }}"
+    document.getElementById('user').value = name;
+  </script>
+  {% else %}
+  <p>Página disponível apenas para usuários logados!</p>
+{% endif %}
+
+{% endblock %}
