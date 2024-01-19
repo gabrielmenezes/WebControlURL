@@ -82,24 +82,26 @@ def deleteMultipleUrl(request):
                 lines = file_data.split('\n')
                 #Para cada linha, gera a entrada no banco de dados
                 for line in lines:
-                        fields = line.split(';')
-                        
                         #Retira se houver o cabeçalho
-                        if fields[0] == "URLs":
+                        if line == "URLs":
                                 continue
                         #Senão verifica se esta vazio
-                        if fields[0] == '':
+                        if line == '':
                                 continue 
                         #Caso seja uma Url, verifica se salva no Banco.
-                        url = Url.objects.get(url=fields[0])
-                        audit = DeletedUrl(url=url.url,usuario=user_id)
+                        try:
+                                url = Url.objects.get(url=line.strip())
+                                audit = DeletedUrl(url=url.url,usuario=user_id)
+                        except:
+                                writer.writerow([line, 'URL nao encontrada'])
+                                continue
 
                         try:
                                 audit.full_clean()
                                 url.delete()
-                                writer.writerow([fields[0], 'sucess'])
+                                writer.writerow([line, 'sucess'])
                         except ValidationError as e:
-                                writer.writerow([fields[0], e])
+                                writer.writerow([line, e])
                                 continue
                 return response
 

@@ -25,6 +25,7 @@
                   <td class="table-data"><a href="{% url 'audit_remove_url' url.pk %}">Deletar</a></td>
                 {% endif %}
               </tr>
+            {% empty %}
             {% endfor %}
       </table>
   {% endblock %}
