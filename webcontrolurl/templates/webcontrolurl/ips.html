@@ -1,0 +1,31 @@
+{% extends 'webcontrolurl/base.html' %}
+{% block content %}
+    
+      <h1>Base de IPs</h1>
+
+      <table class="table">
+        <tr class="table-row">
+            <th class="header__item">IP</th>
+            <th class="header__item">Oficío</th>
+            <th class="header__item">Ticket</th>
+            <th class="header__item">Usuário</th>
+            <th class="header__item">Data</th>
+            {% if user.is_authenticated %}
+              <th class="header__item">Deletar?</th>
+            {% endif %}
+        </tr>
+            {% for ip in object_list %}
+              <tr class="table-row">
+                <td class="table-data">{{ ip.ip}}</td>
+                <td class="table-data">{{ ip.oficio }}</td>
+                <td class="table-data">{{ ip.chamado }}</td>
+                <td class="table-data">{{ ip.usuario }}</td>
+                <td class="table-data">{{ ip.created_at }}</td>
+                {% if user.is_authenticated %}
+                  <td class="table-data"><a href="{% url 'audit_remove_ip' ip.pk %}">Deletar</a></td>
+                {% endif %}
+              </tr>
+            {% empty %}
+            {% endfor %}
+      </table>
+  {% endblock %}

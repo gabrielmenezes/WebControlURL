@@ -1,0 +1,23 @@
+{% extends 'webcontrolurl/base.html' %}
+{% block content %}
+
+  {% if user.is_authenticated %}
+    <H1>Adicionar IP</H1>
+    <br/><br/>
+    <div class="form-group w-50">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button class="btn btn-secondary">Salvar</button>
+      </form>
+    </div>
+
+    <script>
+      var name = "{{ user.id }}"
+      document.getElementById('user').value = name;
+    </script>
+  {% else %}
+    <p>Página disponível apenas para usuários logados!</p>
+  {% endif %}
+
+ {% endblock %}
